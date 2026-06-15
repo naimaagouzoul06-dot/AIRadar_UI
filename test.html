@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Register API</title>
+</head>
+<body>
+  <h2>Test Register API</h2>
+  <button onclick="testRegister()">Envoyer une requete</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function testRegister() {
+      const resultElement = document.getElementById("result");
+      resultElement.textContent = "Chargement...";
+
+      try {
+        // ATTENTION : Changez "test.html" par votre script backend (ex: register.php)
+        const res = await fetch("http://localhost/AtelierWebProjet/proj_uml_web/Ai_Radar/back-end/Api/register.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "Test User",
+            email: "test@example.com",
+            password: "Test1234"
+          })
+        });
+
+        // On vérifie si le serveur a répondu avec un statut HTTP valide (200-299)
+        if (!res.ok) {
+          throw new Error(`Erreur HTTP ! Statut : ${res.status}`);
+        }
+
+        const data = await res.json();
+        resultElement.textContent = JSON.stringify(data, null, 2);
+
+      } catch (error) {
+        // En cas de problème réseau ou de JSON invalide, on affiche l'erreur
+        resultElement.textContent = "Erreur lors de la requête : " + error.message;
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
